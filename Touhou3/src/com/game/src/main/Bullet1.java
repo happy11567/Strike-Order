@@ -3,24 +3,25 @@ package com.game.src.main;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-public class Bullet {
+public class Bullet1 {
 	private double x;
 	private double y;
 	
 	BufferedImage image;
 	
-	public Bullet(double x, double y, Game game) {
+	public Bullet1(double x, double y, Game game) {
 		this.x = x;
 		this.y = y;
 		
 		SpriteSheet ss = new SpriteSheet(game.getSpriteSheet());
 		
-		image = ss.getImage(2, 1, 64, 64);
+		image = ss.getImage(1, 2, 64, 64);
 	}
 	
 	
 	public void tick() {
-		y-=10;
+		y-=3.5;
+		x-=1;
 	}
 	
 	public void render(Graphics g) {
@@ -30,3 +31,4 @@ public class Bullet {
 		return y;
 	}
 }
+

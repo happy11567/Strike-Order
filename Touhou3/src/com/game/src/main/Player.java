@@ -21,7 +21,7 @@ public class Player {
 		this.y = y;
 		
 		SpriteSheet ss = new SpriteSheet(game.getSpriteSheet());
-		player = ss.getImage(1, 1, 64, 64);
+		player = ss.getImage(1, 3, 64, 64);
 	}
 	
 	public void tick() {

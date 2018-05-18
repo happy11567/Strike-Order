@@ -1,3 +1,4 @@
+
 package com.game.src.main;
 
 import java.awt.Canvas;
@@ -129,17 +130,20 @@ public class Game extends Canvas implements Runnable{
 		if(key == KeyEvent.VK_D) {
 			p.setVelX(5);
 		}
-		else if(key == KeyEvent.VK_A) {
+		if(key == KeyEvent.VK_A) {
 			p.setVelX(-5);
 		}
-		else if(key == KeyEvent.VK_S) {
+		if(key == KeyEvent.VK_S) {
 			p.setVelY(5);
 		}
-		else if(key == KeyEvent.VK_W) {
+		if(key == KeyEvent.VK_W) {
 			p.setVelY(-5);
 		}
 		if(key == KeyEvent.VK_SPACE) {
 			c.addBullet(new Bullet(p.getX(),p.getY(),this));
+		}
+		if(key == KeyEvent.VK_Q) {
+			c.addBullet1(new Bullet1(p.getX(),p.getY(),this));
 		}
 	}
 	
@@ -149,13 +153,13 @@ public class Game extends Canvas implements Runnable{
 		if(key == KeyEvent.VK_D) {
 			p.setVelX(0);
 		}
-		else if(key == KeyEvent.VK_A) {
+		if(key == KeyEvent.VK_A) {
 			p.setVelX(0);
 		}
-		else if(key == KeyEvent.VK_S) {
+		if(key == KeyEvent.VK_S) {
 			p.setVelY(0);
 		}
-		else if(key == KeyEvent.VK_W) {
+		if(key == KeyEvent.VK_W) {
 			p.setVelY(0);
 		}
 		}
