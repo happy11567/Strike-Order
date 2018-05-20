@@ -7,8 +7,20 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.LinkedList;
 
 import javax.swing.JFrame;
+
+import com.game.src.main.bullets.Bullet;
+import com.game.src.main.classes.EntityA;
+import com.game.src.main.classes.EntityB;
+import com.game.src.main.classes.EntityC;
+import com.game.src.main.enemies.Gilgamesh;
+import com.game.src.main.graphics.ImageLoader;
+import com.game.src.main.graphics.Textures;
+import com.game.src.main.input.KeyInput;
+import com.game.src.main.input.MouseInput;
+import com.game.src.main.menus.Menu;
 
 public class Game extends Canvas implements Runnable{
 	
@@ -29,6 +41,17 @@ public class Game extends Canvas implements Runnable{
 	private Player p;
 	private Controller c;
 	private Textures tex;
+	private Menu menu;
+	public LinkedList<EntityA> ea;
+	public LinkedList<EntityB> eb;
+	public LinkedList<EntityC> ec;
+	public enum STATE{
+		MENU,
+		GAME,
+		DEATH
+	};
+	
+	private STATE State = STATE.MENU;
 	
 	public void init() {
 		ImageLoader loader = new ImageLoader();
@@ -39,12 +62,18 @@ public class Game extends Canvas implements Runnable{
 			e.printStackTrace();
 		}
 		
-		addKeyListener(new KeyInput(this));
-	
+		this.addKeyListener(new KeyInput(this));
+		this.addMouseListener(new MouseInput(this,p,eb,ec,c));
 		tex = new Textures(this);
 		
 		p = new Player(200,200, tex, this);
 		c = new Controller(this, tex, p);
+		p.givePlayerController(c);
+		menu = new Menu();
+		
+		ea = c.getEntityA();
+		eb = c.getEntityB();
+		ec = c.getEntityC();
 	}
 	
 	
@@ -105,13 +134,18 @@ public class Game extends Canvas implements Runnable{
 	}
 	
 	private void tick() {
-		p.tick();
-		c.tick();
-		rof++;
-		if(rof==8) {
-			c.addBullet(new Bullet(p.getX()-3,p.getY()-45,tex));
-			rof=0;
+		if(State==STATE.GAME || State==STATE.GAME.DEATH) {
+			
+			p.tick();
+			c.tick();
+			rof++;
+			if(rof==8) {
+				c.addEntityA(new Bullet(p.getX()-3,p.getY()-45,tex,this,c));
+				rof=0;
+			}
+		
 		}
+	
 	}
 	private void render() {
 		
@@ -126,10 +160,20 @@ public class Game extends Canvas implements Runnable{
 		///
 		
 		g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
-		g.drawImage(background, 0,0, null);
-		p.render(g);
-		c.render(g);
+		g.drawImage(background, 0,0, this);
 		
+		if(State==STATE.GAME) {
+			p.render(g);
+			c.render(g);
+		} else if(State==STATE.MENU) {
+			menu.render(g);
+			
+		} else if(State==STATE.DEATH) {
+			p.render(g);
+			c.render(g);
+			menu.render(g);
+			
+		}
 		///
 		g.dispose();
 		bs.show();
@@ -141,20 +185,31 @@ public class Game extends Canvas implements Runnable{
 	public void keyPressed(KeyEvent e) {
 		int key = e.getKeyCode();
 		
-		if(key == KeyEvent.VK_D) {
-			p.setVelX(5);
-		}
-		else if(key == KeyEvent.VK_A) {
-			p.setVelX(-5);
-		}
-		else if(key == KeyEvent.VK_S) {
-			p.setVelY(5);
-		}
-		else if(key == KeyEvent.VK_W) {
-			p.setVelY(-5);
-		}
-		else if(key == KeyEvent.VK_SPACE) {
-			c.addEnemy(new Enemy(p.getX()-300,p.getY()-450,tex,p));
+		if(State==STATE.GAME) {
+			if(key == KeyEvent.VK_D) {
+				p.setVelX(5);
+			}
+			else if(key == KeyEvent.VK_A) {
+				p.setVelX(-5);
+			}
+			else if(key == KeyEvent.VK_S) {
+				p.setVelY(5);
+			}
+			else if(key == KeyEvent.VK_W) {
+				p.setVelY(-5);
+			}
+			else if(key == KeyEvent.VK_SPACE) {
+				c.addEntityB(new Gilgamesh(p.getX()-300,p.getY()-450,tex,this,p,c));
+			}
+			else if(key == KeyEvent.VK_Q) {
+				c.removeAll();
+			}
+			else if(key == KeyEvent.VK_SHIFT) {
+				p.setSpeedMod();
+			}
+			else if(key == KeyEvent.VK_F) {
+				p.reSetSpeedMod();
+			}
 		}
 	}
 	
@@ -200,5 +255,11 @@ public class Game extends Canvas implements Runnable{
 	
 	public BufferedImage getSpriteSheet() {
 		return spriteSheet;
+	}
+	public STATE getState() {
+		return State;
+	}
+	public void setState(STATE State) {
+		this.State=State;
 	}
 }
