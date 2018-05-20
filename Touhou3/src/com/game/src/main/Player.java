@@ -1,7 +1,6 @@
 package com.game.src.main;
 
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
 
 public class Player {
 
@@ -11,17 +10,18 @@ public class Player {
 	private double velX = 0;
 	private double velY = 0;
 	
+	private int hp;
+	private Game game;
+	
+	private Textures tex;
 	
 	
-	
-	private BufferedImage player;
-	
-	public Player(double x, double y, Game game) {
+	public Player(double x, double y, Textures tex, Game game) {
 		this.x = x;
 		this.y = y;
-		
-		SpriteSheet ss = new SpriteSheet(game.getSpriteSheet());
-		player = ss.getImage(1, 3, 64, 64);
+		this.tex = tex;
+		this.game=game;
+		hp=3;
 	}
 	
 	public void tick() {
@@ -36,10 +36,13 @@ public class Player {
 			y = 0;
 		if (y>= 2*375-64)
 			y = 2*375-64;
+		if (hp==0)
+			game.stop();
+		
 	}
 	public void render(Graphics g) {
-		g.drawImage(player, (int)x, (int)y, null);
-	
+		g.drawImage(tex.player, (int)x, (int)y, null);
+		g.drawString(Integer.toString(hp), (int)x, (int)y);
 	}
 	
 	public double getX() {
@@ -65,6 +68,12 @@ public class Player {
 	}
 	public void setVelY(double velY) {
 		this.velY=velY;
+	}
+	public void setHp(int hp) {
+		this.hp=hp;
+	}
+	public int getHp() {
+		return hp;
 	}
 	
 	

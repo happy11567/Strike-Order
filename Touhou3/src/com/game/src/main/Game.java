@@ -1,4 +1,3 @@
-
 package com.game.src.main;
 
 import java.awt.Canvas;
@@ -24,21 +23,28 @@ public class Game extends Canvas implements Runnable{
 	
 	private BufferedImage image = new BufferedImage(WIDTH,HEIGHT,BufferedImage.TYPE_INT_RGB);
 	private BufferedImage spriteSheet = null;
+	private BufferedImage background = null;
 	
+	private int rof = 0;
 	private Player p;
 	private Controller c;
+	private Textures tex;
 	
 	public void init() {
 		ImageLoader loader = new ImageLoader();
 		try {
 			spriteSheet = loader.loadImage("/Sprite.png");
+			background = loader.loadImage("/FuyukiCity.png");
 		}catch(IOException e) {
 			e.printStackTrace();
 		}
+		
 		addKeyListener(new KeyInput(this));
 	
-		p = new Player(200,200,this);
-		c = new Controller(this);
+		tex = new Textures(this);
+		
+		p = new Player(200,200, tex, this);
+		c = new Controller(this, tex, p);
 	}
 	
 	
@@ -51,7 +57,7 @@ public class Game extends Canvas implements Runnable{
 		thread.start();
 	}
 	
-	private synchronized void stop() {
+	public synchronized void stop() {
 		if(!running)
 			return;
 	
@@ -101,6 +107,11 @@ public class Game extends Canvas implements Runnable{
 	private void tick() {
 		p.tick();
 		c.tick();
+		rof++;
+		if(rof==8) {
+			c.addBullet(new Bullet(p.getX()-3,p.getY()-45,tex));
+			rof=0;
+		}
 	}
 	private void render() {
 		
@@ -115,6 +126,7 @@ public class Game extends Canvas implements Runnable{
 		///
 		
 		g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+		g.drawImage(background, 0,0, null);
 		p.render(g);
 		c.render(g);
 		
@@ -124,26 +136,25 @@ public class Game extends Canvas implements Runnable{
 		
 	}
 	
+
+	
 	public void keyPressed(KeyEvent e) {
 		int key = e.getKeyCode();
 		
 		if(key == KeyEvent.VK_D) {
 			p.setVelX(5);
 		}
-		if(key == KeyEvent.VK_A) {
+		else if(key == KeyEvent.VK_A) {
 			p.setVelX(-5);
 		}
-		if(key == KeyEvent.VK_S) {
+		else if(key == KeyEvent.VK_S) {
 			p.setVelY(5);
 		}
-		if(key == KeyEvent.VK_W) {
+		else if(key == KeyEvent.VK_W) {
 			p.setVelY(-5);
 		}
-		if(key == KeyEvent.VK_SPACE) {
-			c.addBullet(new Bullet(p.getX(),p.getY(),this));
-		}
-		if(key == KeyEvent.VK_Q) {
-			c.addBullet1(new Bullet1(p.getX(),p.getY(),this));
+		else if(key == KeyEvent.VK_SPACE) {
+			c.addEnemy(new Enemy(p.getX()-300,p.getY()-450,tex,p));
 		}
 	}
 	
@@ -153,16 +164,17 @@ public class Game extends Canvas implements Runnable{
 		if(key == KeyEvent.VK_D) {
 			p.setVelX(0);
 		}
-		if(key == KeyEvent.VK_A) {
+		else if(key == KeyEvent.VK_A) {
 			p.setVelX(0);
 		}
-		if(key == KeyEvent.VK_S) {
+		else if(key == KeyEvent.VK_S) {
 			p.setVelY(0);
 		}
-		if(key == KeyEvent.VK_W) {
+		else if(key == KeyEvent.VK_W) {
 			p.setVelY(0);
-		}
-		}
+		}	
+
+	}
 	
 	
 	

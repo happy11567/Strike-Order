@@ -3,19 +3,18 @@ package com.game.src.main;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-public class Bullet {
+public class Bullet{
 	private double x;
 	private double y;
 	
+	private Textures tex;
+	
 	BufferedImage image;
 	
-	public Bullet(double x, double y, Game game) {
+	public Bullet(double x, double y, Textures tex) {
 		this.x = x;
 		this.y = y;
-		
-		SpriteSheet ss = new SpriteSheet(game.getSpriteSheet());
-		
-		image = ss.getImage(2, 1, 64, 64);
+		this.tex = tex;
 	}
 	
 	
@@ -24,9 +23,12 @@ public class Bullet {
 	}
 	
 	public void render(Graphics g) {
-		g.drawImage(image, (int)x, (int)y, null);
+		g.drawImage(tex.bullet, (int)x, (int)y, null);
 	}
 	public double getY() {
 		return y;
+	}
+	public double getX() {
+		return x;
 	}
 }
