@@ -12,17 +12,11 @@ import com.game.src.main.classes.EntityB;
 import com.game.src.main.classes.EntityC;
 
 public class MouseInput implements MouseListener{
-	private Player p;
-	private LinkedList<EntityB> eb;
-	private LinkedList<EntityC> ec;
 	Game game;
 	Controller c;
 	
 	public MouseInput(Game game,  Player p, LinkedList<EntityB> entb, LinkedList<EntityC> entc, Controller c) {
-		this.p=p;
 		this.game=game;
-		this.eb=entb;
-		this.ec=entc;
 		this.c=c;
 	}
 	

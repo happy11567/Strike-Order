@@ -11,6 +11,7 @@ import java.util.LinkedList;
 
 import javax.swing.JFrame;
 
+
 import com.game.src.main.bullets.Bullet;
 import com.game.src.main.classes.EntityA;
 import com.game.src.main.classes.EntityB;
@@ -21,6 +22,8 @@ import com.game.src.main.graphics.Textures;
 import com.game.src.main.input.KeyInput;
 import com.game.src.main.input.MouseInput;
 import com.game.src.main.menus.Menu;
+import com.game.src.main.music.Music;
+import com.game.src.main.music.SaberAttackSound;
 
 public class Game extends Canvas implements Runnable{
 	
@@ -42,6 +45,7 @@ public class Game extends Canvas implements Runnable{
 	private Controller c;
 	private Textures tex;
 	private Menu menu;
+	private Music musicPlayer;
 	public LinkedList<EntityA> ea;
 	public LinkedList<EntityB> eb;
 	public LinkedList<EntityC> ec;
@@ -54,6 +58,7 @@ public class Game extends Canvas implements Runnable{
 	private STATE State = STATE.MENU;
 	
 	public void init() {
+		
 		ImageLoader loader = new ImageLoader();
 		try {
 			spriteSheet = loader.loadImage("/Sprite.png");
@@ -66,14 +71,15 @@ public class Game extends Canvas implements Runnable{
 		this.addMouseListener(new MouseInput(this,p,eb,ec,c));
 		tex = new Textures(this);
 		
-		p = new Player(200,200, tex, this);
+		p = new Player(WIDTH,500, tex, this);
 		c = new Controller(this, tex, p);
 		p.givePlayerController(c);
 		menu = new Menu();
-		
+		musicPlayer = new Music(); 
 		ea = c.getEntityA();
 		eb = c.getEntityB();
 		ec = c.getEntityC();
+
 	}
 	
 	
@@ -206,9 +212,12 @@ public class Game extends Canvas implements Runnable{
 			}
 			else if(key == KeyEvent.VK_SHIFT) {
 				p.setSpeedMod();
+				new SaberAttackSound();
 			}
 			else if(key == KeyEvent.VK_F) {
 				p.reSetSpeedMod();
+				new SaberAttackSound();
+				
 			}
 		}
 	}

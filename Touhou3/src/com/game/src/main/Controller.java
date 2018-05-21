@@ -9,8 +9,9 @@ import com.game.src.main.classes.EntityC;
 import com.game.src.main.enemies.Gilgamesh;
 import com.game.src.main.enemies.Humunculus;
 import com.game.src.main.graphics.Textures;
+import com.game.src.main.waves.Wave1;
 
-public class Controller {
+public class Controller extends Wave1{
 
 	
 	private LinkedList<EntityA> ea = new LinkedList<EntityA>();
@@ -22,24 +23,34 @@ public class Controller {
 	Player p;
 	Game game;	
 	Textures tex;
-
+	private int ticks;
+	private int seconds;
 	
 	public Controller(Game game, Textures tex, Player p) {
 		this.game = game;
 		this.tex = tex;
 		this.p=p;
+		
+		
 		for(int x = 0; x<(Game.WIDTH*Game.SCALE); x+=64) {
 			addEntityB(new Gilgamesh(x,0, tex, game,p,this));
 		}
 		for(int x = 0; x<(Game.WIDTH*Game.SCALE); x+=64) {
 			addEntityB(new Humunculus(x,0, tex, game,p,this));
 		}
-	
+		ticks=0;
+		seconds=0;
 	}
 	
 
 	
 	public void tick() {
+		ticks++;
+		if(ticks==60) {
+			seconds++;
+			ticks=0;
+		}
+		spawnEnemy(this, tex, game,p);
 		//A Class
 		for(int i=0; i<ea.size(); i++) {
 			enta = ea.get(i);
@@ -103,7 +114,9 @@ public class Controller {
 	public LinkedList<EntityC> getEntityC(){
 		return ec;
 	}
-
+	public int getSeconds(){
+		return seconds;
+	}
 
 
 	public void removeAll() {
@@ -116,4 +129,15 @@ public class Controller {
 			removeEntityC(entc);
 		}	
 	}
+
+
+
+	public int getTicks() {
+		// TODO Auto-generated method stub
+		return ticks;
+	}
+
+
+
+
 }

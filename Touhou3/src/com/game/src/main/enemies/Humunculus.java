@@ -19,14 +19,11 @@ public class Humunculus extends GameObject implements EntityB {
 	private double yVel;
 	private int counter;
 	private Controller c;
-	private Game game;
-	
 	public Humunculus(double x, double y, Textures tex, Game game,Player p, Controller c) {
 		super(x,y);
 		this.tex = tex;
 		this.p =p;
 		this.c = c;
-		this.game = game;
 	} 
 	
 	
@@ -36,15 +33,8 @@ public class Humunculus extends GameObject implements EntityB {
 		move();
 		
 		counter++;
-		if(counter==50) {
-			c.addEntityC(new BulletSR(x,y,tex, p));
-			counter=0;
-		}	
-		if (Math.abs(p.getX()-x)<=5 && Math.abs(p.getY()-y)<=5) {
-		
-			p.setHp(p.getHp()-1);
-			c.removeAll();
-		}	
+		spread1(this,tex, p, c);
+
 		
 	}
 	

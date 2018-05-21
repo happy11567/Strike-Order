@@ -27,20 +27,20 @@ public class Gilgamesh extends GameObject implements EntityB{
 		this.p =p;
 		this.c = c;
 		this.game = game;
+		counter=0;
 	} 
 	
 	
 	public void tick() {
 		bound();
-		down2(this);
+		aim1SR(this, tex, p,c);
+		zigzag3(this);
 		move();
 		counter++;
-		
-		if(counter==50) {
-			c.addEntityC(new BulletSR(x,y,tex, p));
+
+		if(counter==720) {
 			counter=0;
-		}	
-	
+		}
 	}
 	
 	public void render(Graphics g) {

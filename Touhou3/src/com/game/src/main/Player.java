@@ -7,6 +7,7 @@ import com.game.src.main.Game.STATE;
 import com.game.src.main.classes.EntityB;
 import com.game.src.main.classes.EntityC;
 import com.game.src.main.graphics.Textures;
+import com.game.src.main.music.SaberDead;
 
 public class Player extends GameObject{
 
@@ -103,17 +104,21 @@ public class Player extends GameObject{
 		for(int i=0; i<game.eb.size(); i++) {
 			EntityB tempEnt = game.eb.get(i);
 			if (Math.abs(tempEnt.getX()-x)<=5 && Math.abs(tempEnt.getY()-y)<=5) {
-				
+				new SaberDead();
 				hp--;
 				c.removeAll();
+				x=game.WIDTH;
+				y=500;
 			}
 		}	
 		for(int i=0; i<game.ec.size(); i++) {
 			EntityC tempEnt = game.ec.get(i);
 			if (Math.abs(tempEnt.getX()-x)<=5 && Math.abs(tempEnt.getY()-y)<=5) {
-				
+				new SaberDead();
 				hp--;
 				c.removeAll();
+				x=game.WIDTH;
+				y=500;
 			}
 		}	
 	}

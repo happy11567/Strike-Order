@@ -14,6 +14,7 @@ public interface EntityB {
 	public double getY();
 	public void setXVel(double d);
 	public void setYVel(double d);
+	public int getCounter();
 	
 	
 }
